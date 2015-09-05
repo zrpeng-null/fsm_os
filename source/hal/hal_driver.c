@@ -7,31 +7,31 @@
 uint32_t sys_tick;
 void hal_driver_init(void)
 {
-	PORT_SR_ALLOC();
-	PORT_CPU_DISABLE();
+    PORT_SR_ALLOC();
+    PORT_CPU_DISABLE();
 
     jtag_set(JTAG_SWD_ENABLE);//JTAG_SWD_DISABLE
-	delay_init(100);//滴答时钟，1秒100次中断
-	
+    delay_init(100);//滴答时钟，1秒100次中断
+
 #if UART_DEBUG
-	uart_init(115200);
+    uart_init(115200);
 #endif
-	
-	//按键
-	;
-	
-	//adc
-	;
-	
-	PORT_CPU_ENABLE();
+
+    //按键
+    ;
+
+    //adc
+    ;
+
+    PORT_CPU_ENABLE();
 }
 void hal_poll(void)
 {
 #if UART_DEBUG
-	uart_poll();
+    uart_poll();
 #endif
-	
-	//usb_poll();
+
+    //usb_poll();
 }
 
 /******************************************************************************
@@ -39,27 +39,27 @@ void hal_poll(void)
 */
 void hal_active(uint8_t e)
 {
-	switch (e)
-	{
-	case HAL_KEY_EVT:
-		dputs("key\r\n");
-		break;
-		
-	case HAL_TIMEOUT:
-		dputs("0-timeout\r\n");
-		os_timer_set(HAL_ID, HAL_TIMEOUT, 100);
-		break;
-		
-	case STM_ENTRY_SIG:
-		{
-			dputs("0-entry\n");
-			os_timer_set(HAL_ID, HAL_TIMEOUT, 100);
-			os_power_task_state(HAL_ID, POWER_HOLD);//保持供电，不睡眠
-		}
-		break;
+    switch (e)
+    {
+    case HAL_KEY_EVT:
+        dputs("key\r\n");
+        break;
 
-	case STM_EXIT_SIG:
-		dputs("0-exit\n");
-		break;
-	}
+    case HAL_TIMEOUT:
+        dputs("0-timeout\r\n");
+        os_timer_set(HAL_ID, HAL_TIMEOUT, 100);
+        break;
+
+    case STM_ENTRY_SIG:
+        {
+            dputs("0-entry\n");
+            os_timer_set(HAL_ID, HAL_TIMEOUT, 100);
+            os_power_task_state(HAL_ID, POWER_HOLD);//保持供电，不睡眠
+        }
+        break;
+
+    case STM_EXIT_SIG:
+        dputs("0-exit\n");
+        break;
+    }
 }

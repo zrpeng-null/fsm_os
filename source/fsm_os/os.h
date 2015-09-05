@@ -12,14 +12,14 @@ typedef void (*stm_handler)( uint8_t e );
 
 enum
 {
-	RET_SUCCESS			= 0,
-	STM_TRAN,
-	QUEUE_FULLED,
-	QUEUE_EMPTY,
-	FAILURE,
-	TIMER_UNSET_OK,
-	TIMER_SET_OK,
-	TIMER_FAIL,
+    RET_SUCCESS			= 0,
+    STM_TRAN,
+    QUEUE_FULLED,
+    QUEUE_EMPTY,
+    FAILURE,
+    TIMER_UNSET_OK,
+    TIMER_SET_OK,
+    TIMER_FAIL,
 };
 
 /*
@@ -54,11 +54,11 @@ void    CPU_SR_Restore (CPU_SR sr);
 #define TIMER_RELOAD_FLAG 0x80
 typedef struct
 {
-	uint8_t sig;
-	uint8_t task_id;
-	uint8_t flag;
-	uint16_t timeout;
-	uint16_t reload;
+    uint8_t sig;
+    uint8_t task_id;
+    uint8_t flag;
+    uint16_t timeout;
+    uint16_t reload;
 } timer_t;
 
 
@@ -68,10 +68,10 @@ typedef struct
 #define QUEUE_SIZE 4
 typedef struct
 {
-	uint8_t head;
-	uint8_t tail;
-	uint8_t used;
-	uint8_t buf[QUEUE_SIZE];
+    uint8_t head;
+    uint8_t tail;
+    uint8_t used;
+    uint8_t buf[QUEUE_SIZE];
 } queue_t;
 
 

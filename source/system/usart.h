@@ -9,11 +9,11 @@
 
 typedef struct
 {
-	u8 buf[RX_BUF_LEN];
-	u8 state;
-	u16 rx_len;
-	u16 cnt;
-}uart_msg_t;
+    u8 buf[RX_BUF_LEN];
+    u8 state;
+    u16 rx_len;
+    u16 cnt;
+} uart_msg_t;
 
 #define UART_DEBUG  1
 

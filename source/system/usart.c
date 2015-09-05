@@ -15,9 +15,9 @@ static void (*pf_uart_handler)(u8 ch);
  */
 void USART1_IRQHandler(void)
 {
-	u8 ch = USART1->DR;
-	
-	pf_uart_handler(ch);
+    u8 ch = USART1->DR;
+
+    pf_uart_handler(ch);
 }
 
 /*
@@ -25,25 +25,25 @@ void USART1_IRQHandler(void)
  */
 void uart_rx_line(u8 ch)
 {
-	if (s_uart_msg.state == 0)
-	{
-		if (ch == '\r')
-		{
-			s_uart_msg.buf[s_uart_msg.cnt] = 0;
-			s_uart_msg.rx_len = s_uart_msg.cnt;
-			s_uart_msg.cnt = 0;
-			s_uart_msg.state = 1;
-		}
-		else if (ch == '\n')
-		{
-			;
-		}
-		else
-		{
-			s_uart_msg.buf[s_uart_msg.cnt] = ch;
-			s_uart_msg.cnt = (s_uart_msg.cnt + 1) % RX_BUF_LEN;
-		}
-	}
+    if (s_uart_msg.state == 0)
+    {
+        if (ch == '\r')
+        {
+            s_uart_msg.buf[s_uart_msg.cnt] = 0;
+            s_uart_msg.rx_len = s_uart_msg.cnt;
+            s_uart_msg.cnt = 0;
+            s_uart_msg.state = 1;
+        }
+        else if (ch == '\n')
+        {
+            ;
+        }
+        else
+        {
+            s_uart_msg.buf[s_uart_msg.cnt] = ch;
+            s_uart_msg.cnt = (s_uart_msg.cnt + 1) % RX_BUF_LEN;
+        }
+    }
 }
 
 /*
@@ -51,7 +51,7 @@ void uart_rx_line(u8 ch)
  */
 void uart_rx_file(u8 ch)
 {
-	;
+    ;
 }
 
 /*
@@ -59,16 +59,16 @@ void uart_rx_file(u8 ch)
  */
 void uart_set_handler(void (*hanlder)(u8))
 {
-	pf_uart_handler = hanlder;
+    pf_uart_handler = hanlder;
 }
 
 void uart_poll(void)
 {
-	if (s_uart_msg.state == 1)
-	{
-		uart_callback(s_uart_msg.buf, s_uart_msg.rx_len);
-		s_uart_msg.state = 0;
-	}
+    if (s_uart_msg.state == 1)
+    {
+        uart_callback(s_uart_msg.buf, s_uart_msg.rx_len);
+        s_uart_msg.state = 0;
+    }
 }
 
 /*
@@ -76,8 +76,8 @@ void uart_poll(void)
  */
 void uart_sendchar(u8 ch)
 {
-	while((USART1->SR&USART_FLAG_TC)==0){}//等待发送完成
-	USART1->DR = ch&0x01FF;
+    while ((USART1->SR & USART_FLAG_TC) == 0) {} //等待发送完成
+    USART1->DR = ch & 0x01FF;
 }
 
 /*
@@ -85,9 +85,9 @@ void uart_sendchar(u8 ch)
  */
 u8 uart_getchar(void)
 {
-	while ((USART1->SR&USART_FLAG_RXNE)==RESET){}//等待接收数据
+    while ((USART1->SR & USART_FLAG_RXNE) == RESET) {} //等待接收数据
     USART1->SR &= ~USART_FLAG_RXNE;//clear flag
-	return (USART1->DR&0x01ff);
+    return (USART1->DR & 0x01ff);
 }
 
 /*
@@ -107,7 +107,7 @@ void uart_init(u32 baud)
         - Hardware flow control disabled (RTS and CTS signals)
         - Receive and transmit enabled
     */
-    RCC->APB2ENR|= RCC_APB2Periph_USART1|RCC_APB2Periph_GPIOA;
+    RCC->APB2ENR |= RCC_APB2Periph_USART1 | RCC_APB2Periph_GPIOA;
     GPIOA->CRH &= 0xFFFFF00F;//TX  RX
     GPIOA->CRH |= 0x000008B0;//A10 A9
     GPIOA->ODR |= 0x0600;;
@@ -124,7 +124,7 @@ void uart_init(u32 baud)
     /* Enable the USARTx */
     USART_Cmd(USART1, ENABLE);
 
-	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);//接收非空中断
+    USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);//接收非空中断
 
     NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 13;
@@ -132,8 +132,8 @@ void uart_init(u32 baud)
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
 
-	uart_set_handler(uart_rx_line);
+    uart_set_handler(uart_rx_line);
     xfunc_out = uart_sendchar;
-	xfunc_in = uart_getchar;
+    xfunc_in = uart_getchar;
 }
 #endif
